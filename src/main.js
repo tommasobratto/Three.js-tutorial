@@ -34,10 +34,10 @@ function init() {
   earthGeometry = new THREE.SphereGeometry(10, 32, 32);
   earthMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('images/1_earth_8k.jpg') } );
 
-  earthMesh = new THREE.Mesh( earthGeometry, earthMaterial )
-  earthMesh.position.set(20, 1, 1)
+  earthMesh = new THREE.Mesh( earthGeometry, earthMaterial );
+  earthMesh.position.set(20, 1, 1);
 
-  camera.lookAt(earthMesh.position)
+  camera.lookAt(earthMesh.position);
 
   scene.add( mesh, earthMesh );
 
@@ -51,7 +51,7 @@ function animate() {
   mesh.rotation.x += 0.01;
   mesh.rotation.y += 0.01;
 
-  earthMesh.rotation.y += 0.01
+  earthMesh.rotation.y += 0.01;
 
   render();
   requestAnimationFrame( animate );
