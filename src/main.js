@@ -1,36 +1,52 @@
+// http://solutiondesign.com/webgl-and-three-js-texture-mapping/
+
+var renderer; 
+var scene;
+var camera;
+var mesh;
+
 var width = window.innerWidth;
 var height = window.innerHeight;
 
-var renderer = new THREE.WebGLRenderer( { antialias: true } );
-renderer.setSize( width, height );
+init();
+render();
+animate();
 
-document.body.appendChild(renderer.domElement);
+function init() {
+  renderer = new THREE.WebGLRenderer( { antialias: true } );
+  renderer.setSize( width, height );
 
-var scene = new THREE.Scene();
+  document.body.appendChild(renderer.domElement);
 
-var camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 10000 );
+  scene = new THREE.Scene();
 
-camera.position.z = 50;
+  camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 10000 );
 
-scene.add( camera );
+  camera.position.z = 50;
 
-var geometry = new THREE.SphereGeometry( 10, 24, 16 );
-var material = new THREE.MeshPhongMaterial( { color: 'green' } );
-var sphere =  new THREE.Mesh( geometry, material );
+  scene.add( camera );
 
-sphere.position.set(1, 1, 1)
+  geometry = new THREE.BoxGeometry( 10, 10, 10);
+  material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('images/crate.jpg') } );
 
-scene.add( sphere );
+  mesh = new THREE.Mesh( geometry, material );
 
-var directionalLight = new THREE.DirectionalLight( 0x00FF00, 1 );
-directionalLight.position.set(1, 1, 1)
+  scene.add( mesh );
 
-scene.add( directionalLight );
+  var directionalLight = new THREE.DirectionalLight( 0xFFFFF0, 1 );
+  directionalLight.position.set(1, 1, 1)
 
-function render() {
-  requestAnimationFrame( render );
+  scene.add( directionalLight );
+}
 
-  renderer.render( scene, camera );
+function animate() {
+  mesh.rotation.x += 0.04;
+  mesh.rotation.y += 0.04;
+
+  render();
+  requestAnimationFrame( animate );
 };
 
-render();
+function render() {
+  renderer.render( scene, camera );
+};
