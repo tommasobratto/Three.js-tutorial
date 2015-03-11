@@ -1,4 +1,4 @@
-// http://solutiondesign.com/webgl-and-three-js-texture-mapping/
+// refactoring and texturing based on the guide at this URL: 'http://solutiondesign.com/webgl-and-three-js-texture-mapping/'
 
 var renderer; 
 var scene;
