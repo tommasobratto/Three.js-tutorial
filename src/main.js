@@ -4,6 +4,7 @@ var renderer;
 var scene;
 var camera;
 var mesh;
+var earthMesh
 
 var width = window.innerWidth;
 var height = window.innerHeight;
@@ -21,7 +22,6 @@ function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 10000 );
-
   camera.position.z = 50;
 
   scene.add( camera );
@@ -31,7 +31,15 @@ function init() {
 
   mesh = new THREE.Mesh( geometry, material );
 
-  scene.add( mesh );
+  earthGeometry = new THREE.SphereGeometry(10, 32, 32);
+  earthMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('images/1_earth_8k.jpg') } );
+
+  earthMesh = new THREE.Mesh( earthGeometry, earthMaterial )
+  earthMesh.position.set(20, 1, 1)
+
+  camera.lookAt(earthMesh.position)
+
+  scene.add( mesh, earthMesh );
 
   var directionalLight = new THREE.DirectionalLight( 0xFFFFF0, 1 );
   directionalLight.position.set(1, 1, 1)
@@ -40,8 +48,10 @@ function init() {
 }
 
 function animate() {
-  mesh.rotation.x += 0.04;
-  mesh.rotation.y += 0.04;
+  mesh.rotation.x += 0.01;
+  mesh.rotation.y += 0.01;
+
+  earthMesh.rotation.y += 0.01
 
   render();
   requestAnimationFrame( animate );
