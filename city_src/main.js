@@ -56,9 +56,16 @@ function initWorld() {
   geometry = new THREE.BoxGeometry(1, 1, 1);
   geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
   
-  material = new THREE.MeshDepthMaterial();
+  material = new THREE.MeshPhongMaterial( { color: 0xcccccc } );
 
   scene.add( mesh );
+
+  var light = new THREE.DirectionalLight(0xf6e86d, 1);
+  light.position.set(1, 3, 2);
+
+  scene.add(light);
+
+  scene.fog = new THREE.FogExp2(0x9db3b5, 0.002)
 };
 
 function procGen() {
