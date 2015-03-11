@@ -20,6 +20,7 @@ procGen();
 
 requestAnimationFrame( function animate() {
   renderer.render( scene, camera ); 
+
   requestAnimationFrame(animate);
 });
 
@@ -28,18 +29,18 @@ requestAnimationFrame( function animate() {
 function init() {
   renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setSize( width, height );
+  renderer.shadowMapEnabled = true;
 
   document.body.appendChild(renderer.domElement);
 
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera( 60, width / height, 1, 1250 );
-  camera.position.y = 600;
-  camera.position.z = 600;
+  camera.position.y = 575;
+  camera.position.z = 575;
   camera.rotation.x = -45 * Math.PI / 180;
 
   scene.add( camera );
-
 };
 
 function initWorld() {
@@ -52,6 +53,8 @@ function initWorld() {
 
   mesh.rotation.x = -90 * Math.PI / 180;
 
+  mesh.receiveShadow = true;
+
   // initialising a "building"
   geometry = new THREE.BoxGeometry(1, 1, 1);
   geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
@@ -62,6 +65,17 @@ function initWorld() {
 
   var light = new THREE.DirectionalLight(0xf6e86d, 1);
   light.position.set(1, 3, 2);
+  
+  light.castShadow = true;
+  light.shadowDarkness = 0.5;
+  light.shadowMapWidth = 2048;
+  light.shadowMapHeight = 2048;
+  light.position.set(500, 1500, 1000);
+  light.shadowCameraFar = 2500;
+  light.shadowCameraLeft = -1000;
+  light.shadowCameraRight = 1000;
+  light.shadowCameraTop = 1000;
+  light.shadowCameraBottom = -1000;
 
   scene.add(light);
 
@@ -81,9 +95,11 @@ function procGen() {
     building.scale.y = Math.random() * building.scale.x * 8 + 8;
     building.scale.z = building.scale.x;
 
-    THREE.GeometryUtils.merge(cityGeometry, building);
+    THREE.GeometryUtils.merge( cityGeometry, building );
   }
   var city = new THREE.Mesh(cityGeometry, material);
+  city.receiveShadow = true;
+  city.castShadow = true;
 
   scene.add(city);
 };
