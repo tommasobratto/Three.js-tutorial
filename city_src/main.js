@@ -43,7 +43,6 @@ function init() {
 };
 
 function initWorld() {
-
   // initialising a plane/floor
   var geo = new THREE.PlaneBufferGeometry(2000, 2000, 20, 20);
   // last two parameters split plane into a 20x20 grid, 
@@ -63,6 +62,7 @@ function initWorld() {
 };
 
 function procGen() {
+  var cityGeometry = new THREE.Geometry();
 
   for(var i = 0; i < 300; i++) {
     building = new THREE.Mesh(geometry.clone(), material.clone());
@@ -73,8 +73,11 @@ function procGen() {
     building.scale.x = Math.random() * 50 + 10;
     building.scale.y = Math.random() * building.scale.x * 8 + 8;
     building.scale.z = building.scale.x;
-    
-    scene.add( building );
+
+    THREE.GeometryUtils.merge(cityGeometry, building);
   }
+  var city = new THREE.Mesh(cityGeometry, material);
+
+  scene.add(city);
 };
 
