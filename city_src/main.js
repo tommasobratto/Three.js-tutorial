@@ -4,6 +4,8 @@
 var renderer;
 var scene;
 var camera;
+var controls;
+var clock;
 
 var width = window.innerWidth;
 var height = window.innerHeight;
@@ -19,9 +21,11 @@ initWorld();
 procGen();
 
 requestAnimationFrame( function animate() {
+  requestAnimationFrame(animate);
+
   renderer.render( scene, camera ); 
 
-  requestAnimationFrame(animate);
+  controls.update(clock.getDelta());
 });
 
 // ==================
@@ -35,12 +39,19 @@ function init() {
 
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera( 60, width / height, 1, 1250 );
+  camera = new THREE.PerspectiveCamera( 75, width / height, 1, 1250 );
   camera.position.y = 575;
   camera.position.z = 575;
   camera.rotation.x = -45 * Math.PI / 180;
 
   scene.add( camera );
+
+  clock = new THREE.Clock();
+
+  // initialised camera controls
+  controls = new THREE.FirstPersonControls( camera );
+  controls.movementSpeed = 100;
+  controls.lookSpeed = 0.1;
 };
 
 function initWorld() {
