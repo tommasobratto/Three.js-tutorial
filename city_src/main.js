@@ -23,7 +23,7 @@ procGen();
 requestAnimationFrame( function animate() {
   requestAnimationFrame(animate);
 
-  renderer.render( scene, camera ); 
+  renderer.render( scene, camera );
 
   controls.update(clock.getDelta());
 });
@@ -52,12 +52,31 @@ function init() {
   controls = new THREE.FirstPersonControls( camera );
   controls.movementSpeed = 100;
   controls.lookSpeed = 0.1;
+
+  projector = new THREE.Projector();
+
+  renderer.domElement.addEventListener( 'mousedown', function( event ) {
+    var vector = new THREE.Vector3(
+      renderer.devicePixelRatio * ( event.pageX - this.offsetLeft )
+      / this.width * 2 - 1, -renderer.devicePixelRatio * ( event.pageY - this.offsetTop ) / this.height * 2 + 1, 0
+      );
+    projector.unprojectVector( vector, camera );
+
+    var raycaster = new THREE.Raycaster(
+      camera.position,
+      vector.sub( camera.position ).normalize()
+      );
+    var intersects = raycaster.intersectObjects( OBJECTS );
+    if ( intersects.length ) {
+      // intersects[0] describes the clicked object
+    }
+  }, false);
 };
 
 function initWorld() {
   // initialising a plane/floor
   var geo = new THREE.PlaneBufferGeometry(2000, 2000, 20, 20);
-  // last two parameters split plane into a 20x20 grid, 
+  // last two parameters split plane into a 20x20 grid,
   // getting around the "distant vertices" optimization process
   var mat = new THREE.MeshBasicMaterial( { color: 0x9db3b5 } );
   var mesh = new THREE.Mesh( geo, mat );
@@ -69,14 +88,14 @@ function initWorld() {
   // initialising a "building"
   geometry = new THREE.BoxGeometry(1, 1, 1);
   geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
-  
+
   material = new THREE.MeshPhongMaterial( { color: 0xcccccc } );
 
   scene.add( mesh );
 
   var light = new THREE.DirectionalLight(0xf6e86d, 1);
   light.position.set(1, 3, 2);
-  
+
   light.castShadow = true;
   light.shadowDarkness = 0.5;
   light.shadowMapWidth = 2048;
@@ -98,7 +117,7 @@ function procGen() {
 
   for(var i = 0; i < 300; i++) {
     building = new THREE.Mesh(geometry.clone(), material.clone());
-    
+
     // procedural generation of rectangular shapes
     building.position.x = Math.floor(Math.random() * 200 - 100) * 4;
     building.position.z = Math.floor(Math.random() * 200 - 100) * 4;
@@ -114,4 +133,3 @@ function procGen() {
 
   scene.add(city);
 };
-

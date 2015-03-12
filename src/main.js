@@ -27,12 +27,14 @@ function init() {
   scene.add( camera );
 
   geometry = new THREE.BoxGeometry( 10, 10, 10);
-  material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('images/crate.jpg') } );
+  THREE.ImageUtils.crossOrigin = ""
+  material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('http://localhost:8000/images/crate.jpg') } );
 
   mesh = new THREE.Mesh( geometry, material );
 
   earthGeometry = new THREE.SphereGeometry(10, 32, 32);
-  earthMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('images/1_earth_8k.jpg') } );
+  THREE.ImageUtils.crossOrigin = ""
+  earthMaterial = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture('http://localhost:8000/images/1_earth_8k.jpg') } );
 
   earthMesh = new THREE.Mesh( earthGeometry, earthMaterial );
   earthMesh.position.set(20, 1, 1);
